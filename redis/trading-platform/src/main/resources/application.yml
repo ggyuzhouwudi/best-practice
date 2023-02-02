@@ -1,0 +1,27 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/trade?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: 314159
+  thymeleaf:
+    cache: false
+  redis:
+    host: 192.168.236.128
+    port: 6379
+    password: 1
+  cache:
+    type: redis
+    cache-names: pc
+mybatis-plus:
+  global-config:
+    db-config:
+      logic-delete-field: deleted
+      id-type: auto
+  configuration:
+    map-underscore-to-camel-case: true
+    # 二级缓存
+    cache-enabled: false
+    # 字段值为null也返回
+    call-setters-on-nulls: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

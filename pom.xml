@@ -8,6 +8,7 @@
     <module>base</module>
     <module>database</module>
     <module>security</module>
+    <module>redis</module>
   </modules>
 
   <parent>
@@ -82,7 +83,19 @@
         <artifactId>mysql-connector-java</artifactId>
         <version>${mysql.connector.version}</version>
       </dependency>
+      <dependency>
+        <groupId>com.alibaba</groupId>
+        <artifactId>druid-spring-boot-starter</artifactId>
+        <version>1.2.14</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
+  <dependencies>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <optional>true</optional>
+    </dependency>
+  </dependencies>
 
 </project>

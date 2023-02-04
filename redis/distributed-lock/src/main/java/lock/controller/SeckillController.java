@@ -5,6 +5,8 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.Resource;
 
+import org.redisson.Redisson;
+import org.redisson.api.RLock;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,6 +36,8 @@ public class SeckillController {
     public Integer redisPort;
     @Resource
     private StringRedisTemplate template;
+    @Resource
+    private Redisson redisson;
 
     /**
      * 存在并发问题
@@ -108,6 +112,33 @@ public class SeckillController {
                     System.out.println("释放锁失败");
                 }
             }
+        }
+        return result;
+    }
+
+    @GetMapping("/sk-redisson")
+    public String skRedisson() {
+        String result = "抢购失败";
+        RLock lock = redisson.getLock(REDIS_LOCK_KEY);
+        try {
+            // 异步的执行以下逻辑：
+            // 查询是否有key,如果没有就设置并设置过期时间，如果有判断下是不是相同的线程，如果是则续命，计数器加一
+            // 如果不是就返回当前锁的过期时间并转换成布尔
+            //boolean tryLock = lock.tryLock();
+            // 指定锁的过期时间为5秒。如果申请锁失败，则最长等待20S
+            // 实现方式：在死循环中判断等待时间，在等待时间一直获取锁
+            boolean tryLock = lock.tryLock(20, 5, TimeUnit.SECONDS);
+            if (!tryLock) {
+                return result;
+            }
+            // 加锁成功进行抢购
+            result = sell(result);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } finally {
+            // 释放锁，做了以下逻辑
+            // 判断是否是相同线程，不是啥也不管，是的话将计数器减1，没到0的话续命不删除，到0才删除
+            lock.unlock();
         }
         return result;
     }

@@ -20,9 +20,14 @@ public class RedissonConfig {
     public Integer redisPort;
 
     @Bean
-    public Redisson redisson(){
+    public Redisson redisson() {
+        // 单机方式创建
         Config config = new Config();
-
+        config.useSingleServer()
+            .setAddress("redis://" + redisHost + ":" + redisPort)
+            .setPassword("1")
+            .setDatabase(0);
+        return (Redisson) Redisson.create(config);
     }
 
 }

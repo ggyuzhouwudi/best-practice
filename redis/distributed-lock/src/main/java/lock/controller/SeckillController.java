@@ -154,7 +154,6 @@ public class SeckillController {
         if (amount > 0) {
             template.opsForValue().set("sk:0008", String.valueOf(--amount));
             result = "库存剩余：" + amount + "端口:" + port;
-            System.out.println(result);
         }
         return result;
     }

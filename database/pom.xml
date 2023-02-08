@@ -31,6 +31,7 @@
       <groupId>com.github.jsqlparser</groupId>
       <artifactId>jsqlparser</artifactId>
     </dependency>
+
     <dependency>
       <groupId>com.baomidou</groupId>
       <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
